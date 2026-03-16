@@ -62,18 +62,49 @@ Run `stats.py` to compute all the evaluation metrics for DPMORL and other baseli
 
 ## Portfolio Environment (GymFolio + FinRL) Integration
 
-This repository now includes a portfolio optimization environment adapter (`Portfolio`) that plugs GymFolio into the same DPMORL training loop.
+This repository includes a portfolio optimization adapter (`Portfolio`) that plugs GymFolio into the DPMORL loop.
 
-### 1) Install optional dependencies
+### What was added
+
+Code:
+
+- `MORL_stablebaselines3/envs/portfolio/mo_portfolio_env.py`
+  - wraps GymFolio environment as a 2-objective MORL environment
+  - objective 1: portfolio return reward
+  - objective 2: negative volatility proxy (`-risk_penalty`)
+- `main_policy.py`
+  - `--env Portfolio` support
+  - portfolio CLI options:
+    - `--portfolio_data_dir`
+    - `--portfolio_rebalance_every`
+    - `--portfolio_max_trajectory_len`
+    - `--portfolio_lookback`
+    - `--portfolio_risk_scale`
+  - pretrained-only workflow:
+    - `--pretrained_only`
+    - `--num_pretrained_to_use`
+  - resume/skip logic for already-trained policy checkpoints
+- `scripts/prepare_portfolio_data.py`
+  - downloads FinRL-style data and converts to GymFolio input (`df_ohlc.pkl`, `df_observations.pkl`)
+- helper scripts:
+  - `scripts/prepare_portfolio_expanded.sh`
+  - `scripts/run_portfolio_expanded_train.sh`
+
+### Utility files: `.pt` vs `.png`
+
+- `utility-model-selected/dim-2/utility-*.pt` are the actual utility models used for training policies.
+- `utility-plot-selected/dim-2/utility-*.png` are visualization-only contours of those utility functions.
+
+### Install optional dependencies
 
 ```
 pip install git+https://github.com/hsleejw21/gymfolio
 pip install git+https://github.com/hsleejw21/FinRL
 ```
 
-### 2) Prepare portfolio data via FinRL downloader
+### Data preparation
 
-The script below downloads Yahoo Finance data, computes FinRL features, and converts them to GymFolio input format:
+Base example:
 
 ```
 python scripts/prepare_portfolio_data.py \
@@ -83,52 +114,96 @@ python scripts/prepare_portfolio_data.py \
 	--output_dir data/portfolio
 ```
 
-This creates:
+Expanded split preset:
 
-- `data/portfolio/df_ohlc.pkl`
-- `data/portfolio/df_observations.pkl`
-- `data/portfolio/finrl_raw.csv`
+```
+./scripts/prepare_portfolio_expanded.sh
+```
 
-### 3) Train DPMORL on portfolio environment
+It creates `data/portfolio_expanded/{train,val,test,full}`.
+
+### Reproducible experiment run used in this repository
+
+#### Train (Option A)
+
+- `exp_name=dpmorl_portfolio_a`
+- `total_timesteps=1e6`
+- `max_num_policies=20`
+- `pretrained_only=True`
+- `num_pretrained_to_use=20`
+- train data: `data/portfolio_expanded/train`
+
+Example:
 
 ```
 python -u main_policy.py \
 	--env Portfolio \
 	--reward_two_dim \
-	--exp_name dpmorl_portfolio \
 	--lamda 0.1 \
-	--portfolio_data_dir data/portfolio \
+	--exp_name dpmorl_portfolio_a \
+	--max_num_policies 20 \
+	--pretrained_only True \
+	--num_pretrained_to_use 20 \
+	--total_timesteps 1000000 \
+	--num_envs 10 \
+	--portfolio_data_dir data/portfolio_expanded/train \
 	--portfolio_rebalance_every 5 \
 	--portfolio_max_trajectory_len 252 \
-	--portfolio_lookback 16 \
+	--portfolio_lookback 20 \
 	--portfolio_risk_scale 1.0
 ```
 
-Reward dimensions for `Portfolio` are:
+#### Test/evaluation
 
-- objective 1: portfolio return reward from GymFolio
-- objective 2: negative volatility proxy (risk penalty)
+Important: the number of tickers must match between train and test (observation shape consistency).
 
-### 4) Expanded experiment preset (more assets + split periods)
+In this run, train used 20 tickers after alignment, so evaluation used:
 
-For a larger experiment setup, use these helper scripts:
+- `data/portfolio_expanded/test_aligned`
+
+with:
 
 ```
-./scripts/prepare_portfolio_expanded.sh
-./scripts/run_portfolio_expanded_train.sh
+python -u main_policy.py \
+	--env Portfolio \
+	--reward_two_dim \
+	--lamda 0.1 \
+	--exp_name dpmorl_portfolio_a \
+	--max_num_policies 20 \
+	--pretrained_only True \
+	--num_pretrained_to_use 20 \
+	--test_only True \
+	--num_test_episodes 100 \
+	--portfolio_data_dir data/portfolio_expanded/test_aligned \
+	--portfolio_rebalance_every 5 \
+	--portfolio_max_trajectory_len 252 \
+	--portfolio_lookback 20 \
+	--portfolio_risk_scale 1.0
 ```
 
-`prepare_portfolio_expanded.sh` builds 4 datasets under `data/portfolio_expanded`:
+### Result files and how to read them
 
-- `train`: 2010-01-01 ~ 2019-12-31
-- `val`: 2020-01-01 ~ 2021-12-31
-- `test`: 2022-01-01 ~ 2024-12-31
-- `full`: 2010-01-01 ~ 2024-12-31
+All outputs are under:
 
-By default it uses 30 large-cap US tickers and trains with:
+- `experiments/dpmorl_portfolio_a/DPMORL.Portfolio.LossNormLamda_0.1/`
 
-- `portfolio_max_trajectory_len=252`
-- `portfolio_lookback=20`
-- `portfolio_rebalance_every=5`
-- `total_timesteps=300000` (override with `TOTAL_TIMESTEPS=...`)
-- `max_num_policies=16` (override with `MAX_POLICIES=...`)
+Key files:
+
+- `policy-pretrain-*.zip`: trained policies (20 total)
+- `MORL_Portfolio_PPO_policypretrain-*_seed0_0.npz`: training episode vector returns
+- `test_returns_policy_pretrain-*.npz`: test episode vector returns (100 episodes each)
+- `test_final_batch_1.png`, `test_final_batch_10.png`: policy distribution on test set
+- `Portfolio_final_batch_1.png`, `Portfolio_final_batch_10.png`: final training return distribution
+
+Interpretation:
+
+- x-axis (`Return 1`): return objective (higher is better)
+- y-axis (`Return 2`): `-risk` objective (higher is better; means lower risk)
+
+### Visualization
+
+```
+python plot_utility_returns.py dpmorl_portfolio_a
+```
+
+This generates final scatter summaries (`test_final_*`, `Portfolio_final_*`) and per-policy test scatter plots.
