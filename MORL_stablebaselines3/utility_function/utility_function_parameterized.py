@@ -32,6 +32,10 @@ class Utility_Function_Parameterized(nn.Module):
 
         # Save initialized params
         self.init_params = self.state_dict()
+
+    @property
+    def device(self):
+        return next(self.parameters()).device
         
     def forward(self, xx, return_numpy=True, scale_back=True):
         x = np.array(xx)
@@ -64,7 +68,9 @@ class Utility_Function_Parameterized(nn.Module):
         if return_numpy:
             util += self.lamda * (x / (max_input - min_input + 1e-5)).mean(1)
         else:
-            util += torch.as_tensor(self.lamda * (x / (max_input - min_input + 1e-5)).mean(1)).cuda()
+            util += torch.as_tensor(self.lamda * (x / (max_input - min_input + 1e-5)).mean(1),
+                                    dtype=torch.float32,
+                                    device=self.device)
         # rescale to the original return scale
         if scale_back:
             util *= (max_input - min_input).mean()
@@ -73,7 +79,7 @@ class Utility_Function_Parameterized(nn.Module):
         return util
 
     def compute_utility(self, input_x): 
-        input_x = torch.as_tensor(input_x, dtype=torch.float32).cuda()
+        input_x = torch.as_tensor(input_x, dtype=torch.float32, device=self.device)
         input_x = self.bn1(input_x)
         x = self.mlp1(input_x)
         x = torch.cat([x.clamp(min=-0.5), x.clamp(min=-0.5, max=0.5), x.clamp(max=0.5)], -1)
@@ -95,10 +101,12 @@ class Utility_Function_Parameterized(nn.Module):
             layer.weight.data = layer.weight.data.abs()
 
     def make_monotone(self):
+        zero = torch.tensor(0.0, device=self.device)
+        max_weight = torch.tensor(self.max_weight, device=self.device)
         for layer in [self.mlp1, self.mlp2, self.mlp3, self.mlp4, self.bn2, self.bn3]:
-            layer.weight.data = torch.maximum(layer.weight.data, torch.tensor(0.0))
+            layer.weight.data = torch.maximum(layer.weight.data, zero)
         for layer in [self.mlp1, self.mlp2, self.mlp3, self.mlp4, self.bn2, self.bn3]:
-            layer.weight.data = torch.minimum(layer.weight.data, torch.tensor(self.max_weight))
+            layer.weight.data = torch.minimum(layer.weight.data, max_weight)
 
 
 def visualize_utility(min_x, max_x, min_y, max_y,

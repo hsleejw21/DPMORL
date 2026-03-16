@@ -59,3 +59,76 @@ To visualize the return distributions of policies learned by DPMORL, run `python
 ## Compute the evaluation metric
 
 Run `stats.py` to compute all the evaluation metrics for DPMORL and other baseline methods. The implemenetation includes constraint satisfaction and variance objective. 
+
+## Portfolio Environment (GymFolio + FinRL) Integration
+
+This repository now includes a portfolio optimization environment adapter (`Portfolio`) that plugs GymFolio into the same DPMORL training loop.
+
+### 1) Install optional dependencies
+
+```
+pip install git+https://github.com/hsleejw21/gymfolio
+pip install git+https://github.com/hsleejw21/FinRL
+```
+
+### 2) Prepare portfolio data via FinRL downloader
+
+The script below downloads Yahoo Finance data, computes FinRL features, and converts them to GymFolio input format:
+
+```
+python scripts/prepare_portfolio_data.py \
+	--start_date 2010-01-01 \
+	--end_date 2024-01-01 \
+	--tickers AAPL,MSFT,GOOG,AMZN,META \
+	--output_dir data/portfolio
+```
+
+This creates:
+
+- `data/portfolio/df_ohlc.pkl`
+- `data/portfolio/df_observations.pkl`
+- `data/portfolio/finrl_raw.csv`
+
+### 3) Train DPMORL on portfolio environment
+
+```
+python -u main_policy.py \
+	--env Portfolio \
+	--reward_two_dim \
+	--exp_name dpmorl_portfolio \
+	--lamda 0.1 \
+	--portfolio_data_dir data/portfolio \
+	--portfolio_rebalance_every 5 \
+	--portfolio_max_trajectory_len 252 \
+	--portfolio_lookback 16 \
+	--portfolio_risk_scale 1.0
+```
+
+Reward dimensions for `Portfolio` are:
+
+- objective 1: portfolio return reward from GymFolio
+- objective 2: negative volatility proxy (risk penalty)
+
+### 4) Expanded experiment preset (more assets + split periods)
+
+For a larger experiment setup, use these helper scripts:
+
+```
+./scripts/prepare_portfolio_expanded.sh
+./scripts/run_portfolio_expanded_train.sh
+```
+
+`prepare_portfolio_expanded.sh` builds 4 datasets under `data/portfolio_expanded`:
+
+- `train`: 2010-01-01 ~ 2019-12-31
+- `val`: 2020-01-01 ~ 2021-12-31
+- `test`: 2022-01-01 ~ 2024-12-31
+- `full`: 2010-01-01 ~ 2024-12-31
+
+By default it uses 30 large-cap US tickers and trains with:
+
+- `portfolio_max_trajectory_len=252`
+- `portfolio_lookback=20`
+- `portfolio_rebalance_every=5`
+- `total_timesteps=300000` (override with `TOTAL_TIMESTEPS=...`)
+- `max_num_policies=16` (override with `MAX_POLICIES=...`)

@@ -1,0 +1,225 @@
+pybullet build time: Oct 14 2023 15:59:43
+CUDA is not available. Falling back to CPU.
+env: Portfolio, env reward dim: 2
+reward_dim_indices = [0, 1], reward_shape = 2
+num_total_policies = 20
+Evaluating policy 1 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 2 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 3 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 4 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 5 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 6 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 7 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 8 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 9 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 10 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 11 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 12 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 13 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 14 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 15 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 16 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 17 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 18 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 19 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100
+Evaluating policy 20 with 100 episodes...
+progress: 10/100
+progress: 20/100
+progress: 30/100
+progress: 40/100
+progress: 50/100
+progress: 60/100
+progress: 70/100
+progress: 80/100
+progress: 90/100
+progress: 100/100

@@ -1,0 +1,10 @@
+pybullet build time: Oct 14 2023 15:59:43
+/Users/jungwoo.hong/miniconda3/envs/dpmorl/lib/python3.8/site-packages/gym/spaces/box.py:73: UserWarning: [33mWARN: Box bound precision lowered by casting to float32[0m
+  logger.warn(
+CUDA is not available. Falling back to CPU.
+env: ReacherBullet, env reward dim: 4
+reward_dim_indices = [0, 1, 2, 3], reward_shape = 4
+Traceback (most recent call last):
+  File "main_policy.py", line 443, in <module>
+    assert os.path.isdir(f'utility-model-selected/dim-{reward_shape}'), 'There is no pretrained utility functions provided. '
+AssertionError: There is no pretrained utility functions provided. 

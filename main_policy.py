@@ -51,6 +51,7 @@ from MORL_stablebaselines3.utility_function.utility_function_parameterized impor
 from MORL_stablebaselines3.utility_function.utility_function_programmed import Utility_Function_Programmed
 from MORL_stablebaselines3.utility_function.utility_function_programmed import Utility_Function_Linear
 from MORL_stablebaselines3.utility_function.utility_function_programmed import Utility_Function_Diverse_Goal
+from MORL_stablebaselines3.envs.portfolio.mo_portfolio_env import make_portfolio_env_fn
 
 from DIPG.diverse_goal_env import DiverseGoalEnv
 import copy
@@ -76,8 +77,23 @@ def make_env(env_name, rank, utility_function, reward_dim, reward_dim_indices, s
     return _init
 
 def choose_gpu(args):
-    import os, socket, pynvml
-    pynvml.nvmlInit()
+    import os, socket
+    import torch
+    if not torch.cuda.is_available():
+        print("CUDA is not available. Falling back to CPU.")
+        os.environ['CUDA_VISIBLE_DEVICES'] = ""
+        os.environ['TF_AUTO_MIXED_PRECISION_GRAPH_REWRITE_IGNORE_PERFORMANCE'] = '1'
+        os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+        return
+    try:
+        import pynvml
+        pynvml.nvmlInit()
+    except Exception as e:
+        print(f"NVML is unavailable ({e}). Falling back to CPU.")
+        os.environ['CUDA_VISIBLE_DEVICES'] = ""
+        os.environ['TF_AUTO_MIXED_PRECISION_GRAPH_REWRITE_IGNORE_PERFORMANCE'] = '1'
+        os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+        return
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(('8.8.8.8', 80))
     ip = s.getsockname()[0]
@@ -122,7 +138,7 @@ def config_args():
                  "FishWood", "FourRoom", "FruitTree",
                  "Highway", "LunarLander", "SuperMarioBros",
                  "HalfCheetah", "Hopper", "Reacher",
-                 "ReacherBullet", "ResourceGathering", "WaterReservoir", "Minecart", "DiverseGoal"],
+                 "ReacherBullet", "ResourceGathering", "WaterReservoir", "Minecart", "DiverseGoal", "Portfolio"],
         default="MountainCar",
     )
     parser.add_argument(
@@ -198,6 +214,17 @@ def config_args():
         default=20,
     )
     parser.add_argument(
+        '--pretrained_only',
+        help="Use only pretrained utility functions (skip programmed utilities)",
+        type=str2bool, nargs='?', const=True, default=False,
+    )
+    parser.add_argument(
+        '--num_pretrained_to_use',
+        help="How many pretrained utility functions to use (0 means all available)",
+        type=int,
+        default=0,
+    )
+    parser.add_argument(
         '--total_timesteps',
         help="The number of total timesteps for training and evaluating a policy",
         type=float,
@@ -215,9 +242,14 @@ def config_args():
         type=str,
         default='all',
     )
+    parser.add_argument('--portfolio_data_dir', type=str, default='data/portfolio')
+    parser.add_argument('--portfolio_rebalance_every', type=int, default=5)
+    parser.add_argument('--portfolio_max_trajectory_len', type=int, default=252)
+    parser.add_argument('--portfolio_lookback', type=int, default=16)
+    parser.add_argument('--portfolio_risk_scale', type=float, default=1.0)
     return parser.parse_args()
 
-def env_functions(env_name):
+def env_functions(env_name, args=None):
     if env_name == "MountainCar":
         return MOContinuousMountainCar
     elif env_name == "BreakableBottles":
@@ -252,11 +284,21 @@ def env_functions(env_name):
         return Minecart
     elif env_name == "DiverseGoal":
         return DiverseGoalEnv
+    elif env_name == "Portfolio":
+        if args is None:
+            raise ValueError("Portfolio environment requires parsed args")
+        return make_portfolio_env_fn(
+            data_dir=args.portfolio_data_dir,
+            rebalance_every=args.portfolio_rebalance_every,
+            max_trajectory_len=args.portfolio_max_trajectory_len,
+            observation_frame_lookback=args.portfolio_lookback,
+            risk_scale=args.portfolio_risk_scale,
+        )
     else:
         raise NotImplementedError("Please write the right and implemented env name!")
 
 
-def get_id_name(env_name):
+def get_id_name(env_name, args=None):
     if env_name == "MountainCar":
         return "mo-mountaincarcontinuous-v0"
     elif env_name == "BreakableBottles":
@@ -291,6 +333,8 @@ def get_id_name(env_name):
         return "minecart-v0"
     elif env_name == "DiverseGoal":
         return DiverseGoalEnv
+    elif env_name == "Portfolio":
+        return env_functions(env_name, args=args)
     else:
         raise NotImplementedError("Please write the right and implemented env name!")
 
@@ -382,7 +426,7 @@ if __name__ == "__main__":
 
     choose_gpu(args)
 
-    base_env_name = env_functions(args.env)
+    base_env_name = env_functions(args.env, args=args)
 
     alg_name = "PPO"
 
@@ -390,7 +434,7 @@ if __name__ == "__main__":
 
     print(f"env: {args.env}, env reward dim: {test_env.reward_dim}")
 
-    gym_id_name = get_id_name(args.env)
+    gym_id_name = get_id_name(args.env, args=args)
 
     num_cpu = args.num_envs  # Number of processes to use
     epochs = args.utility_epochs
@@ -427,6 +471,8 @@ if __name__ == "__main__":
     # Load pretrained utility functions
     assert os.path.isdir(f'utility-model-selected/dim-{reward_shape}'), 'There is no pretrained utility functions provided. '
     num_pretrained_utility = len(glob.glob(f'utility-model-selected/dim-{reward_shape}/*'))
+    if args.num_pretrained_to_use > 0:
+        num_pretrained_utility = min(num_pretrained_utility, args.num_pretrained_to_use)
     pretrained_utility_paths = [f'utility-model-selected/dim-{reward_shape}/utility-{i}.pt'
                                 for i in range(num_pretrained_utility)]
     
@@ -435,12 +481,14 @@ if __name__ == "__main__":
         model = Utility_Function_Parameterized(reward_shape=reward_shape, norm=norm, lamda=args.lamda, max_weight=0.5, keep_scale=args.keep_scale, size_factor=1)
         model.load_state_dict(torch.load(path))
         model.eval()
-        model = model.cuda()
+        model = model.to(DEVICE)
         pretrained_utility_functions.append(model)
     num_utility_pretrained = len(pretrained_utility_functions)
     
     if args.linear_utility or args.env == 'DiverseGoal':
         num_utility_pretrained = 0
+    if args.pretrained_only:
+        num_utility_programmed = 0
 
     policies = []
     utility_functions_optims = []
@@ -453,6 +501,11 @@ if __name__ == "__main__":
     
     num_total_policies = min(num_utility_programmed + num_utility_pretrained, args.max_num_policies)
     print(f'{num_total_policies = }')
+
+    def get_policy_name(policy_idx):
+        if policy_idx < num_utility_programmed:
+            return f'program-{policy_idx}'
+        return f'pretrain-{policy_idx-num_utility_programmed}'
     
     def get_utility(policy_idx):
         if policy_idx < num_utility_programmed:
@@ -460,8 +513,15 @@ if __name__ == "__main__":
         else:
             utility_function = pretrained_utility_functions[policy_idx - num_utility_programmed]
         return utility_function
+
     if not args.test_only:
         for policy_idx in range(num_total_policies):
+            policy_name = get_policy_name(policy_idx)
+            policy_path = f'{utility_dir}/policy-{policy_name}.zip'
+            if os.path.exists(policy_path):
+                print(f"Skipping policy {policy_idx + 1} ({policy_name}): already exists at {policy_path}")
+                continue
+
             utility_function = get_utility(policy_idx)
             if args.env in normalization_data:
                 utility_function.min_val = normalization_data[args.env]['min'][0][reward_dim_indices]
@@ -478,12 +538,8 @@ if __name__ == "__main__":
             env = MultiEnv_UtilityFunction(env, utility_function, reward_dim=reward_shape, augment_state=args.augment_state)
             env.update_utility_function(utility_function)
 
-            policy = PPO("MlpPolicy", env, verbose=1, device='cuda', n_epochs=5)
+            policy = PPO("MlpPolicy", env, verbose=1, device=DEVICE, n_epochs=5)
 
-            if policy_idx < num_utility_programmed:
-                policy_name = f'program-{policy_idx}'
-            else:
-                policy_name = f'pretrain-{policy_idx-num_utility_programmed}'
             print(f"Training policy {policy_idx + 1} with {total_steps} steps...")
             curtime = time.time()
             return_logger = ReturnLogger(utility_dir, args.env, alg_name, policy_name, 0, args.seed)
@@ -493,10 +549,7 @@ if __name__ == "__main__":
         
     if args.test_only:
         for policy_idx in range(0, num_total_policies):
-            if policy_idx < num_utility_programmed:
-                policy_name = f'program-{policy_idx}'
-            else:
-                policy_name = f'pretrain-{policy_idx-num_utility_programmed}'
+            policy_name = get_policy_name(policy_idx)
             print(f"Evaluating policy {policy_idx+1} with {args.num_test_episodes} episodes...")
             if not os.path.exists(f'{utility_dir}/policy-{policy_name}.zip'):
                 print(f'{policy_name} does not exist')

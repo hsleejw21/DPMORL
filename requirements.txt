@@ -6,3 +6,6 @@ tqdm
 rich
 ipython
 git+https://github.com/benelot/pybullet-gym
+# Optional: portfolio environment integration
+git+https://github.com/hsleejw21/gymfolio
+git+https://github.com/hsleejw21/FinRL
