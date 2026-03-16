@@ -128,28 +128,54 @@ DPMORL/
 ├── main_policy.py                    # Train / evaluate a set of Pareto-optimal policies
 ├── plot_utility_returns.py           # Visualise 2D return distribution scatter plots
 ├── stats.py                          # Compute EU, CVaR, constraint satisfaction, variance metrics
-├── utils.py                          # Multi-objective DummyVecEnv
+├── utils.py                          # Multi-objective DummyVecEnv (stores buf_rews as reward_dim vector)
 ├── env.txt                           # List of environments used in the paper
 ├── run_policy_parallel.sh            # Train all environments in parallel (nohup)
 ├── run_test.sh                       # Evaluate all trained policies
 ├── requirements.txt                  # Python dependencies
 ├── MORL_stablebaselines3/
-│   ├── common/                       # PPO training loop utilities & argument parsers
+│   ├── common/
+│   │   ├── argument_parser.py        # Shared argument parser utilities
+│   │   ├── base_runner.py            # Base training-loop runner
+│   │   ├── mpi_adam.py               # MPI-compatible Adam optimiser
+│   │   ├── mpi_adam_optimizer.py     # MPI Adam optimiser (extended)
+│   │   ├── tf_utils.py               # TensorFlow utility helpers
+│   │   └── utils.py                  # Miscellaneous training utilities
 │   ├── envs/
-│   │   ├── gridworlds/               # Grid-world environment implementations
-│   │   ├── mountain_car/             # Mountain car environment
-│   │   ├── pendula/                  # Pendulum environments
-│   │   ├── reacher/                  # Reacher (PyBullet) environment
-│   │   ├── safety_gym/               # Safety gymnasium environments
+│   │   ├── utils.py                  # Array type alias & shared env utilities
+│   │   ├── gridworlds/
+│   │   │   ├── gridworld_base.py         # Base grid cell / object definitions
+│   │   │   ├── mo_gridworld_base.py      # Multi-objective gridworld base class
+│   │   │   ├── mo_deep_sea_treasure_env.py  # Custom DeepSeaTreasure grid (10×10 map)
+│   │   │   ├── mo_gathering_env.py       # Resource-gathering grid environment
+│   │   │   └── mo_traffic_env.py         # Multi-objective traffic grid environment
+│   │   ├── mountain_car/
+│   │   │   ├── mo_mountain_car.py        # Multi-objective mountain car extension
+│   │   │   ├── mountain_car.py           # Base mountain car implementation
+│   │   │   └── test.py                   # Mountain car environment tests
+│   │   ├── pendula/
+│   │   │   ├── double_pendulum.py        # MuJoCo double-pendulum (safety-constrained)
+│   │   │   ├── single_pendulum.py        # MuJoCo single-pendulum (safety-constrained)
+│   │   │   └── test.py                   # Pendulum environment tests
+│   │   ├── reacher/
+│   │   │   ├── reacher.py                # Custom Reacher environment
+│   │   │   └── test.py                   # Reacher environment tests
+│   │   ├── safety_gym/
+│   │   │   └── augmented_sg_envs.py      # Safety-gym environment augmentations
 │   │   └── wrappers/
-│   │       ├── utility_env_wrapper.py      # ObsInfoWrapper + MultiEnv_UtilityFunction
-│   │       ├── morl_env_wrapper.py         # Generic MORL environment wrapper
-│   │       └── scalar_reward_wrapper.py    # Scalar reward conversion wrapper
+│   │       ├── utility_env_wrapper.py    # ObsInfoWrapper + MultiEnv_UtilityFunction (core wrappers)
+│   │       ├── morl_env_wrapper.py       # Generic MORL env decorator (class-based)
+│   │       ├── morl_env.py               # morl_env class decorator (Utility_Function mixin)
+│   │       ├── morl_env_torch.py         # morl_env_torch decorator (PyTorch utility)
+│   │       ├── original_multi_rewards_env_torch.py  # Original multi-reward env decorator
+│   │       ├── scalar_reward_wrapper.py  # Scalar reward scalarisation wrapper
+│   │       ├── safe_env.py               # SafeEnv base class (adds safety cost to info)
+│   │       └── saute_env.py              # SAUTE safety augmentation class decorator
 │   └── utility_function/
-│       ├── utility_function_parameterized.py  # Monotone neural-network utility (MLP)
-│       └── utility_function_programmed.py     # Analytic, linear & DiverseGoal utilities
+│       ├── utility_function_parameterized.py  # Monotone neural-network utility (4-layer MLP)
+│       └── utility_function_programmed.py     # Analytic, linear & DiverseGoal utility functions
 ├── DIPG/
-│   └── diverse_goal_env.py           # Custom 2D grid environment with 4 stochastic goals
+│   └── diverse_goal_env.py           # Custom 2D grid with 4 stochastic goal regions
 ├── utility-model-selected/
 │   └── dim-2/                        # 33 pre-trained utility function checkpoints (2D reward)
 ├── utility-plot-selected/
