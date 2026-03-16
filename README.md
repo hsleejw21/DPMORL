@@ -4,63 +4,158 @@ Implementations for our paper [*Distributional Pareto-Optimal Multi-Objective Re
 
 ## Summary
 
-**DPMORL** (Distributional Pareto-Optimal Multi-Objective Reinforcement Learning) is a framework for training a set of policies that collectively approximate the Pareto front in multi-objective reinforcement learning (MORL) settings. Rather than optimising a single scalar reward, DPMORL finds a diverse set of policies, each excelling under a different trade-off between objectives, while simultaneously reasoning about the *distribution* of returns rather than just their expectation.
+**DPMORL** (Distributional Pareto-Optimal Multi-Objective Reinforcement Learning) is a framework published at NeurIPS 2023 for learning a diverse set of policies that collectively approximate the Pareto front in multi-objective reinforcement learning (MORL). Rather than collapsing multiple objectives into a single scalar up front, DPMORL trains one policy per utility function and reasons about the full *distribution* of episode returns — capturing risk, variance, and tail behaviour — not just expected value.
+
+---
 
 ### Problem Setting
 
-Many real-world decision-making problems involve several conflicting objectives (e.g., speed vs. energy efficiency, reward vs. safety). Classical RL collapses these into a single scalar, which requires the designer to fix trade-off weights up front. MORL instead produces a *Pareto-optimal* set of policies — a frontier where improving one objective necessarily worsens another — allowing a decision-maker to pick the most suitable policy after training.
+Real-world sequential decision-making often involves conflicting objectives (e.g., speed vs. safety, reward vs. energy). Classical RL requires the designer to fix a scalar trade-off before training. MORL instead discovers a *Pareto front* — a set of policies where no single policy dominates another across all objectives — and hands that front to the decision-maker. DPMORL extends this to the distributional setting: it is not just the mean return that matters, but the entire return distribution, enabling risk-sensitive policy selection.
 
-### Key Ideas
+---
 
-| Concept | Description |
-|---|---|
-| **Distributional MORL** | Policies are evaluated using the full *distribution* of cumulative returns (not just the mean), capturing risk and variance. |
-| **Learned Utility Functions** | Nonlinear monotone neural networks map a multi-dimensional return vector to a scalar utility. Multiple diverse utility functions are generated before training to cover different preference regions of the Pareto front. |
-| **Monotone MLP** | The utility network enforces monotonicity by keeping all weights non-negative, guaranteeing that higher rewards on any objective never decrease the utility score. |
-| **Policy-Utility Co-optimisation** | Each policy is paired with one utility function and trained via PPO (from Stable-Baselines3). Policies are trained sequentially, and each new policy is encouraged to produce a return distribution *different* from those already found (diversification). |
-| **λ-regularised Utility** | A hyperparameter `λ` blends the learned nonlinear utility with a simple linear scalarisation, maintaining gradient quality during early training. |
+### Algorithm Overview
 
-### Training Pipeline
+DPMORL proceeds in three phases:
 
-```
-1. Generate utility functions     →  python main_generate_utility.py
-2. Train policies                 →  python -u main_policy.py --lamda=0.1 --env <env> --reward_two_dim --exp_name <name>
-3. Evaluate trained policies      →  . run_test.sh
-4. Visualise return distributions →  python plot_utility_returns.py <exp_name>
-5. Compute evaluation metrics     →  python stats.py
-```
+**Phase 1 — Utility Function Generation (`main_generate_utility.py`)**  
+A library of diverse, monotone utility functions is built before any policy training:
+- A small set of *programmed* utilities (`Utility_Function_Programmed`) are defined analytically (weighted sums, softplus compositions, etc.).
+- A large set of *parameterised* utilities (`Utility_Function_Parameterized`) are trained as monotone MLPs. Each is trained to be *diverse* from all existing utilities using a repulsion loss in function-value and angular-derivative space (`logsumexp`-based contrastive loss).
+- All weights are clamped to `[0, max_weight]` after every gradient step, enforcing monotonicity: utility can only increase when any reward dimension improves.
+- 33 pre-trained utility checkpoints for 2-dimensional reward are provided in `utility-model-selected/dim-2/`.
+
+**Phase 2 — Policy Training (`main_policy.py`)**  
+Each utility function induces a scalar reward signal; one PPO agent is trained per utility:
+- The environment's raw vector reward `r ∈ ℝᵈ` is accumulated into a running return `zₜ`.
+- The scalar reward given to PPO at step `t` is `U(zₜ) − U(zₜ₋₁)` — the *marginal utility* of the new transition.
+- This reward shaping makes the PPO objective exactly equivalent to maximising the expected final utility `E[U(Z_T)]`.
+- `λ`-regularisation blends the learned utility with a linear scalarisation `λ · mean(r)` to maintain well-behaved gradients.
+- Policies are saved as `.zip` files (Stable-Baselines3 format) under `experiments/<exp_name>/`.
+
+**Phase 3 — Evaluation & Analysis**  
+- `run_test.sh` calls `main_policy.py --test_only` to roll out each saved policy for 100 episodes and records the raw multi-objective return vectors.
+- `plot_utility_returns.py` visualises the 2D return distributions of all policies as scatter plots.
+- `stats.py` computes four evaluation metrics against baseline algorithms: **Expected Utility (EU)**, **CVaR**, **Constraint Satisfaction**, and **Variance Objective**.
+
+---
+
+### Key Components
+
+#### Utility Functions (`MORL_stablebaselines3/utility_function/`)
+
+| Class | File | Description |
+|---|---|---|
+| `Utility_Function_Parameterized` | `utility_function_parameterized.py` | 4-layer monotone MLP. Weights clamped to `[0, max_weight]`. Input normalised via `BatchNorm1d`. λ-blend with linear scalarisation. |
+| `Utility_Function_Programmed` | `utility_function_programmed.py` | Analytic utilities: uniform mean + per-dimension emphasis weights. |
+| `Utility_Function_Linear` | `utility_function_programmed.py` | 13 fixed linear weight vectors covering the full simplex (for ablation / baselines). |
+| `Utility_Function_Diverse_Goal` | `utility_function_programmed.py` | Six hand-crafted non-linear utilities for the DiverseGoal environment (sigmoid-based). |
+
+#### Environment Wrappers (`MORL_stablebaselines3/envs/wrappers/`)
+
+| Class | File | Description |
+|---|---|---|
+| `ObsInfoWrapper` | `utility_env_wrapper.py` | Gymnasium→Gym bridge. Accumulates per-step rewards into episode return `zₜ`. Reports `episode.r` (vector) in `info`. |
+| `MultiEnv_UtilityFunction` | `utility_env_wrapper.py` | `VecEnvWrapper` that converts vector rewards to scalar utility via `U(zₜ)−U(zₜ₋₁)`. Optionally augments observations with normalised cumulative return. |
+| `DummyVecEnv` | `utils.py` | Multi-objective-aware vectorised environment that stores `buf_rews` with shape `(num_envs, reward_dim)`. |
+
+#### Custom Environment (`DIPG/diverse_goal_env.py`)
+
+`DiverseGoalEnv` — a 2D continuous grid with four goal regions, each having a different stochastic reward distribution (Gaussian with different means/covariances). Designed to test distributional MORL: policies must learn to reach specific goal regions to satisfy specific utility functions.
+
+---
 
 ### Supported Environments
 
-DPMORL has been tested on the following multi-objective environments:
+| Domain | Environment | MO-Gymnasium ID |
+|---|---|---|
+| Classic Control | MountainCar | `mo-mountaincarcontinuous-v0` |
+| Grid Worlds | DeepSeaTreasure | `deep-sea-treasure-v0` |
+| | FruitTree | `fruit-tree-v0` |
+| | FourRoom | `four-room-v0` |
+| | BreakableBottles | `breakable-bottles-v0` |
+| | FishWood | `fishwood-v0` |
+| | ResourceGathering | `resource-gathering-v0` |
+| | DiverseGoal | custom (`DIPG/`) |
+| Continuous Control | HalfCheetah | `mo-halfcheetah-v4` |
+| | Hopper | `mo-hopper-v4` |
+| | Reacher | `mo-reacher-v4` |
+| | ReacherBullet | `mo-reacher-v0` |
+| Other | Highway | `mo-highway-v0` |
+| | LunarLander | `mo-lunar-lander-v2` |
+| | SuperMarioBros | `mo-supermario-v0` |
+| | WaterReservoir | `water-reservoir-v0` |
+| | Minecart | `minecart-v0` |
 
-| Domain | Environments |
+---
+
+### Evaluation Metrics (`stats.py`)
+
+DPMORL is compared against **GPI-LS**, **GPI-PD**, **OLS**, and **PGMORL** using:
+
+| Metric | Description |
 |---|---|
-| Classic Control | MountainCar |
-| Grid Worlds | DeepSeaTreasure, FruitTree, FourRoom, BreakableBottles, FishWood, ResourceGathering, DiverseGoal |
-| Continuous Control (MuJoCo) | HalfCheetah, Hopper, Reacher, ReacherBullet |
-| Other | Highway, LunarLander, SuperMarioBros, WaterReservoir, Minecart |
+| **Expected Utility (EU)** | Average best-policy utility under 101 uniformly-spaced linear weight vectors. |
+| **CVaR** | Conditional Value at Risk (α=0.05) of the scalarised return distribution across weight vectors — measures tail-risk performance. |
+| **Constraint Satisfaction** | Fraction of randomly sampled linear return constraints that are satisfiable by at least one policy. |
+| **Variance Objective** | Mean–variance trade-off under random weight vectors combining mean return and return standard deviation. |
+
+---
+
+### Key Hyperparameters
+
+| Flag | Default | Description |
+|---|---|---|
+| `--lamda` | `0.01` | λ blend between learned utility and linear scalarisation |
+| `--env` | `MountainCar` | Environment name (see table above) |
+| `--exp_name` | `dpmorl` | Experiment directory name under `experiments/` |
+| `--reward_two_dim` | `False` | Restrict to first two reward dimensions |
+| `--reward_dim_indices` | `''` | Explicit reward dimension indices (e.g. `[0,1,2]`) |
+| `--total_timesteps` | `1e7` | PPO training budget per policy |
+| `--iters` | `50` | Utility function training iterations |
+| `--max_num_policies` | `20` | Maximum number of policies to train |
+| `--num_envs` | `20` | Parallel environments for vectorised PPO rollout |
+| `--utility_epochs` | `200` | Epochs per utility function training round |
+| `--gpu` | `all` | GPU selection (auto-selects most free GPU) |
+
+---
 
 ### Repository Structure
 
 ```
 DPMORL/
-├── main_generate_utility.py       # Step 1 – generate & save utility function models
-├── main_policy.py                 # Step 2 – train a set of Pareto-optimal policies
-├── plot_utility_returns.py        # Step 4 – visualise return distributions
-├── stats.py                       # Step 5 – compute evaluation metrics
-├── run_policy_parallel.sh         # Helper to train all environments in parallel
-├── run_test.sh                    # Helper to evaluate all trained policies
+├── main_generate_utility.py          # Generate & save diverse utility function models
+├── main_policy.py                    # Train / evaluate a set of Pareto-optimal policies
+├── plot_utility_returns.py           # Visualise 2D return distribution scatter plots
+├── stats.py                          # Compute EU, CVaR, constraint satisfaction, variance metrics
+├── utils.py                          # Multi-objective DummyVecEnv
+├── env.txt                           # List of environments used in the paper
+├── run_policy_parallel.sh            # Train all environments in parallel (nohup)
+├── run_test.sh                       # Evaluate all trained policies
+├── requirements.txt                  # Python dependencies
 ├── MORL_stablebaselines3/
-│   ├── common/                    # PPO algorithm and training loop extensions
-│   ├── envs/                      # Environment wrappers & custom environments
+│   ├── common/                       # PPO training loop utilities & argument parsers
+│   ├── envs/
+│   │   ├── gridworlds/               # Grid-world environment implementations
+│   │   ├── mountain_car/             # Mountain car environment
+│   │   ├── pendula/                  # Pendulum environments
+│   │   ├── reacher/                  # Reacher (PyBullet) environment
+│   │   ├── safety_gym/               # Safety gymnasium environments
+│   │   └── wrappers/
+│   │       ├── utility_env_wrapper.py      # ObsInfoWrapper + MultiEnv_UtilityFunction
+│   │       ├── morl_env_wrapper.py         # Generic MORL environment wrapper
+│   │       └── scalar_reward_wrapper.py    # Scalar reward conversion wrapper
 │   └── utility_function/
-│       ├── utility_function_parameterized.py  # Monotone neural-network utility
-│       └── utility_function_programmed.py     # Hand-crafted & linear utility functions
-├── DIPG/                          # DiverseGoal environment implementation
-├── utility-model-selected/        # Pre-generated utility function checkpoints
-├── utility-plot-selected/         # Visualisations of the pre-generated utilities
-└── normalization_data/            # Per-environment reward normalisation statistics
+│       ├── utility_function_parameterized.py  # Monotone neural-network utility (MLP)
+│       └── utility_function_programmed.py     # Analytic, linear & DiverseGoal utilities
+├── DIPG/
+│   └── diverse_goal_env.py           # Custom 2D grid environment with 4 stochastic goals
+├── utility-model-selected/
+│   └── dim-2/                        # 33 pre-trained utility function checkpoints (2D reward)
+├── utility-plot-selected/
+│   └── dim-2/                        # Contour plot visualisations of pre-trained utilities
+└── normalization_data/
+    └── data.pickle                   # Per-environment min/max return normalisation statistics
 ```
 
 ## Requirements
