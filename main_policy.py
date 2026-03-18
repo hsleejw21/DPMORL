@@ -211,7 +211,7 @@ def config_args():
         '--max_num_policies',
         help="The number of policies for MORL optimization",
         type=int,
-        default=20,
+        default=33,
     )
     parser.add_argument(
         '--pretrained_only',
@@ -242,7 +242,7 @@ def config_args():
         type=str,
         default='all',
     )
-    parser.add_argument('--portfolio_data_dir', type=str, default='data/portfolio')
+    parser.add_argument('--portfolio_data_dir', type=str, default='data/portfolio_expanded/train')
     parser.add_argument('--portfolio_rebalance_every', type=int, default=5)
     parser.add_argument('--portfolio_max_trajectory_len', type=int, default=252)
     parser.add_argument('--portfolio_lookback', type=int, default=16)

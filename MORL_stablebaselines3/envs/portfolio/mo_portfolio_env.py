@@ -119,15 +119,16 @@ class MOFinancePortfolioEnv(gymnasium.Env):
     """
     Adapter that wraps gymfolio PortfolioOptimizationEnv into DPMORL-compatible
     multi-objective environment with 2D reward:
-        reward[0] = period return reward from gymfolio
-        reward[1] = negative period volatility proxy (risk penalty)
+        reward[0] = period return (5-day log-return sum) from gymfolio
+        reward[1] = negative episode-rolling volatility of period returns
+                    (std of all period returns accumulated so far in the episode)
     """
 
     metadata = {"render_modes": ["human"]}
 
     def __init__(
         self,
-        data_dir: str = "data/portfolio",
+        data_dir: str = "data/portfolio_expanded/train",
         ohlc_file: str = "df_ohlc.pkl",
         obs_file: str = "df_observations.pkl",
         rebalance_every: int = 5,
@@ -175,6 +176,7 @@ class MOFinancePortfolioEnv(gymnasium.Env):
         self.observation_space = self.base_env.observation_space
         self.reward_dim = 2
         self.risk_scale = risk_scale
+        self._period_returns_buf: list = []
 
     def _to_numpy_obs(self, obs):
         if hasattr(obs, "detach"):
@@ -185,24 +187,23 @@ class MOFinancePortfolioEnv(gymnasium.Env):
 
     def reset(self, *, seed: Optional[int] = None, options: Optional[dict] = None):
         obs, info = self.base_env.reset(seed=seed if seed is not None else 5106, options=options)
+        self._period_returns_buf = []
         return self._to_numpy_obs(obs), info
 
     def step(self, action):
         obs, reward_scalar, truncated, terminated, info = self.base_env.step(action)
 
-        # Risk proxy from per-period return path used internally by gymfolio.
-        last_returns = getattr(self.base_env, "last_returns", None)
-        risk_penalty = 0.0
-        if last_returns is not None:
-            if hasattr(last_returns, "detach"):
-                last_returns = last_returns.detach().cpu().numpy()
-            last_returns = np.asarray(last_returns).reshape(-1)
-            if last_returns.size > 1:
-                risk_penalty = float(np.std(last_returns))
+        # Accumulate period returns and compute episode-rolling volatility.
+        # reward[1] = -std(all period returns so far in this episode)
+        # This decouples risk from the current period's return, enabling genuine trade-offs.
+        self._period_returns_buf.append(float(reward_scalar))
+        if len(self._period_returns_buf) >= 2:
+            risk_penalty = float(np.std(self._period_returns_buf))
+        else:
+            risk_penalty = 0.0
 
         reward_vec = np.array([float(reward_scalar), -self.risk_scale * risk_penalty], dtype=np.float32)
 
-        # Keep convenient diagnostics in info
         info = dict(info)
         info["reward_return"] = float(reward_vec[0])
         info["reward_risk_penalty"] = float(risk_penalty)
