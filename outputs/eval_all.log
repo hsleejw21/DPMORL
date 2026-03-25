@@ -1,0 +1,278 @@
+Traceback (most recent call last):
+  File "eval_portfolio.py", line 120, in <module>
+    main()
+  File "eval_portfolio.py", line 109, in main
+    returns = evaluate_policy(model, env, args.n_episodes)
+  File "eval_portfolio.py", line 54, in evaluate_policy
+    action, _ = model.predict(obs, deterministic=False)
+  File "/Users/jungwoo.hong/miniconda3/envs/dpmorl/lib/python3.8/site-packages/stable_baselines3/common/base_class.py", line 539, in predict
+    return self.policy.predict(observation, state, episode_start, deterministic)
+  File "/Users/jungwoo.hong/miniconda3/envs/dpmorl/lib/python3.8/site-packages/stable_baselines3/common/policies.py", line 343, in predict
+    observation, vectorized_env = self.obs_to_tensor(observation)
+  File "/Users/jungwoo.hong/miniconda3/envs/dpmorl/lib/python3.8/site-packages/stable_baselines3/common/policies.py", line 263, in obs_to_tensor
+    vectorized_env = is_vectorized_observation(observation, self.observation_space)
+  File "/Users/jungwoo.hong/miniconda3/envs/dpmorl/lib/python3.8/site-packages/stable_baselines3/common/utils.py", line 398, in is_vectorized_observation
+    return is_vec_obs_func(observation, observation_space)
+  File "/Users/jungwoo.hong/miniconda3/envs/dpmorl/lib/python3.8/site-packages/stable_baselines3/common/utils.py", line 265, in is_vectorized_box_observation
+    raise ValueError(
+ValueError: Error: Unexpected observation shape (10, 17, 160) for Box environment, please use (17, 240) or (n_env, 17, 240) for the observation shape.
+Traceback (most recent call last):
+  File "eval_portfolio.py", line 120, in <module>
+    main()
+  File "eval_portfolio.py", line 109, in main
+    returns = evaluate_policy(model, env, args.n_episodes)
+  File "eval_portfolio.py", line 54, in evaluate_policy
+    action, _ = model.predict(obs, deterministic=False)
+  File "/Users/jungwoo.hong/miniconda3/envs/dpmorl/lib/python3.8/site-packages/stable_baselines3/common/base_class.py", line 539, in predict
+    return self.policy.predict(observation, state, episode_start, deterministic)
+  File "/Users/jungwoo.hong/miniconda3/envs/dpmorl/lib/python3.8/site-packages/stable_baselines3/common/policies.py", line 343, in predict
+    observation, vectorized_env = self.obs_to_tensor(observation)
+  File "/Users/jungwoo.hong/miniconda3/envs/dpmorl/lib/python3.8/site-packages/stable_baselines3/common/policies.py", line 263, in obs_to_tensor
+    vectorized_env = is_vectorized_observation(observation, self.observation_space)
+  File "/Users/jungwoo.hong/miniconda3/envs/dpmorl/lib/python3.8/site-packages/stable_baselines3/common/utils.py", line 398, in is_vectorized_observation
+    return is_vec_obs_func(observation, observation_space)
+  File "/Users/jungwoo.hong/miniconda3/envs/dpmorl/lib/python3.8/site-packages/stable_baselines3/common/utils.py", line 265, in is_vectorized_box_observation
+    raise ValueError(
+ValueError: Error: Unexpected observation shape (10, 17, 160) for Box environment, please use (17, 240) or (n_env, 17, 240) for the observation shape.
+ERROR conda.cli.main_run:execute(142): `conda run bash -c 
+cd /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL
+
+run_eval() {
+    local EXP=$1
+    local RTYPE=$2
+    echo ''
+    echo "[$EXP] $RTYPE"
+    python eval_portfolio.py         --exp_name "$EXP"         --reward_type "$RTYPE"         --data_dir /tmp/portfolio_eval_data         --risk_scale 1.0         --n_episodes 100         --lamda 0.01
+}
+
+run_eval dpmorl_portfolio_v3  cvar_perstep
+run_eval dpmorl_portfolio_v4a cvar_perstep
+run_eval dpmorl_portfolio_v4b sharpe_cvar
+` failed. (See above for error)
+
+[dpmorl_portfolio_v3] cvar_perstep
+Experiment  : dpmorl_portfolio_v3
+Policies    : 5 found
+Data dir    : /tmp/portfolio_eval_data
+Reward type : cvar_perstep  risk_scale=1.0
+Episodes    : 100 per policy
+
+  Evaluating program-0...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v3/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-0.npz  shape=(100, 2)  r0=35.460±24.241  r1=-119.978±75.446
+  Evaluating program-1...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v3/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-1.npz  shape=(100, 2)  r0=39.731±24.722  r1=-123.413±69.437
+  Evaluating program-2...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v3/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-2.npz  shape=(100, 2)  r0=43.469±27.201  r1=-138.041±75.792
+  Evaluating program-3...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v3/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-3.npz  shape=(100, 2)  r0=45.365±27.825  r1=-141.788±75.748
+  Evaluating program-4...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v3/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-4.npz  shape=(100, 2)  r0=40.368±26.418  r1=-124.366±66.926
+
+Done.
+
+[dpmorl_portfolio_v4a] cvar_perstep
+Experiment  : dpmorl_portfolio_v4a
+Policies    : 6 found
+Data dir    : /tmp/portfolio_eval_data
+Reward type : cvar_perstep  risk_scale=1.0
+Episodes    : 100 per policy
+
+  Evaluating program-0...
+
+[dpmorl_portfolio_v4b] sharpe_cvar
+Experiment  : dpmorl_portfolio_v4b
+Policies    : 4 found
+Data dir    : /tmp/portfolio_eval_data
+Reward type : sharpe_cvar  risk_scale=1.0
+Episodes    : 100 per policy
+
+  Evaluating program-0...
+[v4a] cvar_perstep | 6 policies (30-ticker data)
+Experiment  : dpmorl_portfolio_v4a
+Policies    : 6 found
+Data dir    : data/portfolio_expanded/train
+Reward type : cvar_perstep  risk_scale=1.0
+Episodes    : 100 per policy
+
+  Evaluating program-0...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v4a/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-0.npz  shape=(100, 2)  r0=22.248±13.677  r1=-53.895±30.550
+  Evaluating program-1...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v4a/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-1.npz  shape=(100, 2)  r0=25.791±15.729  r1=-60.412±33.872
+  Evaluating program-2...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v4a/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-2.npz  shape=(100, 2)  r0=24.506±15.348  r1=-58.697±35.916
+  Evaluating program-3...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v4a/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-3.npz  shape=(100, 2)  r0=22.748±14.864  r1=-52.776±31.952
+  Evaluating program-4...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v4a/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-4.npz  shape=(100, 2)  r0=24.082±15.770  r1=-55.713±34.167
+  Evaluating program-5...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v4a/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-5.npz  shape=(100, 2)  r0=24.795±15.523  r1=-54.172±33.428
+
+Done.
+
+[v4b] sharpe_cvar | 4 policies (30-ticker data)
+Experiment  : dpmorl_portfolio_v4b
+Policies    : 4 found
+Data dir    : data/portfolio_expanded/train
+Reward type : sharpe_cvar  risk_scale=1.0
+Episodes    : 100 per policy
+
+  Evaluating program-0...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v4b/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-0.npz  shape=(100, 2)  r0=106.231±78.913  r1=-62.855±32.887
+  Evaluating program-1...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v4b/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-1.npz  shape=(100, 2)  r0=80.174±90.390  r1=-57.322±34.725
+  Evaluating program-2...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v4b/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-2.npz  shape=(100, 2)  r0=93.282±84.231  r1=-61.268±30.998
+  Evaluating program-3...
+    progress: 10/100
+    progress: 20/100
+    progress: 30/100
+    progress: 40/100
+    progress: 50/100
+    progress: 60/100
+    progress: 70/100
+    progress: 80/100
+    progress: 90/100
+    progress: 100/100
+  Saved: experiments/dpmorl_portfolio_v4b/DPMORL.Portfolio.LossNormLamda_0.01/test_returns_policy_program-3.npz  shape=(100, 2)  r0=94.649±81.636  r1=-60.999±36.077
+
+Done.

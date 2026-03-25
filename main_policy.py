@@ -247,6 +247,9 @@ def config_args():
     parser.add_argument('--portfolio_max_trajectory_len', type=int, default=252)
     parser.add_argument('--portfolio_lookback', type=int, default=16)
     parser.add_argument('--portfolio_risk_scale', type=float, default=1.0)
+    parser.add_argument('--portfolio_reward_type', type=str, default='cvar_perstep',
+                        choices=['cvar_perstep', 'sharpe_cvar', 'rolling_cvar', 'variance'],
+                        help='Reward design: cvar_perstep (v4a), sharpe_cvar (v4b), rolling_cvar, variance')
     return parser.parse_args()
 
 def env_functions(env_name, args=None):
@@ -293,6 +296,7 @@ def env_functions(env_name, args=None):
             max_trajectory_len=args.portfolio_max_trajectory_len,
             observation_frame_lookback=args.portfolio_lookback,
             risk_scale=args.portfolio_risk_scale,
+            reward_type=args.portfolio_reward_type,
         )
     else:
         raise NotImplementedError("Please write the right and implemented env name!")

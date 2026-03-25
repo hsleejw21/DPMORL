@@ -12,9 +12,9 @@ mkdir -p "$ROOT_DIR/data/portfolio_expanded/train" \
          "$ROOT_DIR/data/portfolio_expanded/test" \
          "$ROOT_DIR/data/portfolio_expanded/full"
 
-echo "[1/4] train split: 2010-01-01 ~ 2019-12-31"
+echo "[1/4] train split: 2015-01-01 ~ 2019-12-31"
 PYTHONPATH="$PYTHONPATH" conda run -n dpmorl python "$ROOT_DIR/scripts/prepare_portfolio_data.py" \
-  --start_date 2010-01-01 \
+  --start_date 2015-01-01 \
   --end_date 2019-12-31 \
   --tickers "$TICKERS" \
   --output_dir "$ROOT_DIR/data/portfolio_expanded/train"
@@ -33,9 +33,9 @@ PYTHONPATH="$PYTHONPATH" conda run -n dpmorl python "$ROOT_DIR/scripts/prepare_p
   --tickers "$TICKERS" \
   --output_dir "$ROOT_DIR/data/portfolio_expanded/test"
 
-echo "[4/4] full set: 2010-01-01 ~ 2024-12-31"
+echo "[4/4] full set: 2015-01-01 ~ 2024-12-31"
 PYTHONPATH="$PYTHONPATH" conda run -n dpmorl python "$ROOT_DIR/scripts/prepare_portfolio_data.py" \
-  --start_date 2010-01-01 \
+  --start_date 2015-01-01 \
   --end_date 2024-12-31 \
   --tickers "$TICKERS" \
   --output_dir "$ROOT_DIR/data/portfolio_expanded/full"

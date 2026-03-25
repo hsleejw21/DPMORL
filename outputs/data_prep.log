@@ -1,0 +1,640 @@
+[1/4] train split: 2010-01-01 ~ 2019-12-31
+Failed to get ticker 'AAPL' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AAPL']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MSFT' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MSFT']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'GOOG' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['GOOG']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'AMZN' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AMZN']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'META' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['META']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'NVDA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['NVDA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'TSLA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['TSLA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'BRK-B' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['BRK-B']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'UNH' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['UNH']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'JNJ' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['JNJ']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'JPM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['JPM']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'V' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['V']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'XOM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['XOM']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'WMT' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['WMT']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PG' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PG']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'HD' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['HD']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'CVX' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['CVX']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'ABBV' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['ABBV']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'KO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['KO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PEP' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PEP']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MRK' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MRK']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'BAC' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['BAC']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PFE' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PFE']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'AVGO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AVGO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'COST' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['COST']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'TMO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['TMO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'DIS' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['DIS']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'ADBE' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['ADBE']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'CRM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['CRM']: YFTzMissingError('possibly delisted; no timezone found')
+Downloading data for ['AAPL', 'MSFT', 'GOOG', 'AMZN', 'META', 'NVDA', 'TSLA', 'BRK-B', 'UNH', 'JNJ', 'JPM', 'V', 'XOM', 'WMT', 'PG', 'MA', 'HD', 'CVX', 'ABBV', 'KO', 'PEP', 'MRK', 'BAC', 'PFE', 'AVGO', 'COST', 'TMO', 'DIS', 'ADBE', 'CRM'] from 2010-01-01 to 2019-12-31...
+Running feature engineering (FinRL-compatible subset)...
+Converting to gymfolio format...
+Saved:
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/train/finrl_raw.csv
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/train/df_ohlc.pkl (shape=(2515, 80))
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/train/df_observations.pkl (shape=(2515, 160))
+[2/4] val split: 2020-01-01 ~ 2021-12-31
+Failed to get ticker 'AAPL' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AAPL']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MSFT' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MSFT']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'GOOG' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['GOOG']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'AMZN' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AMZN']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'META' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['META']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'NVDA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['NVDA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'TSLA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['TSLA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'BRK-B' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['BRK-B']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'UNH' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['UNH']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'JNJ' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['JNJ']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'JPM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['JPM']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'V' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['V']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'XOM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['XOM']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'WMT' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['WMT']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PG' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PG']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'HD' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['HD']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'CVX' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['CVX']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'ABBV' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['ABBV']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'KO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['KO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PEP' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PEP']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MRK' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MRK']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'BAC' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['BAC']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PFE' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PFE']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'AVGO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AVGO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'COST' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['COST']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'TMO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['TMO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'DIS' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['DIS']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'ADBE' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['ADBE']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'CRM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['CRM']: YFTzMissingError('possibly delisted; no timezone found')
+Downloading data for ['AAPL', 'MSFT', 'GOOG', 'AMZN', 'META', 'NVDA', 'TSLA', 'BRK-B', 'UNH', 'JNJ', 'JPM', 'V', 'XOM', 'WMT', 'PG', 'MA', 'HD', 'CVX', 'ABBV', 'KO', 'PEP', 'MRK', 'BAC', 'PFE', 'AVGO', 'COST', 'TMO', 'DIS', 'ADBE', 'CRM'] from 2020-01-01 to 2021-12-31...
+Running feature engineering (FinRL-compatible subset)...
+Converting to gymfolio format...
+Saved:
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/val/finrl_raw.csv
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/val/df_ohlc.pkl (shape=(504, 120))
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/val/df_observations.pkl (shape=(504, 240))
+[3/4] test split: 2022-01-01 ~ 2024-12-31
+Failed to get ticker 'AAPL' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AAPL']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MSFT' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MSFT']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'GOOG' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['GOOG']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'AMZN' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AMZN']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'META' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['META']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'NVDA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['NVDA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'TSLA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['TSLA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'BRK-B' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['BRK-B']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'UNH' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['UNH']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'JNJ' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['JNJ']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'JPM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['JPM']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'V' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['V']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'XOM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['XOM']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'WMT' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['WMT']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PG' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PG']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'HD' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['HD']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'CVX' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['CVX']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'ABBV' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['ABBV']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'KO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['KO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PEP' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PEP']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MRK' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MRK']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'BAC' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['BAC']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PFE' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PFE']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'AVGO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AVGO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'COST' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['COST']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'TMO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['TMO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'DIS' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['DIS']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'ADBE' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['ADBE']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'CRM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['CRM']: YFTzMissingError('possibly delisted; no timezone found')
+Downloading data for ['AAPL', 'MSFT', 'GOOG', 'AMZN', 'META', 'NVDA', 'TSLA', 'BRK-B', 'UNH', 'JNJ', 'JPM', 'V', 'XOM', 'WMT', 'PG', 'MA', 'HD', 'CVX', 'ABBV', 'KO', 'PEP', 'MRK', 'BAC', 'PFE', 'AVGO', 'COST', 'TMO', 'DIS', 'ADBE', 'CRM'] from 2022-01-01 to 2024-12-31...
+Running feature engineering (FinRL-compatible subset)...
+Converting to gymfolio format...
+Saved:
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/test/finrl_raw.csv
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/test/df_ohlc.pkl (shape=(752, 120))
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/test/df_observations.pkl (shape=(752, 240))
+[4/4] full set: 2010-01-01 ~ 2024-12-31
+Failed to get ticker 'AAPL' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AAPL']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MSFT' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MSFT']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'GOOG' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['GOOG']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'AMZN' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AMZN']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'META' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['META']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'NVDA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['NVDA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'TSLA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['TSLA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'BRK-B' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['BRK-B']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'UNH' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['UNH']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'JNJ' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['JNJ']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'JPM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['JPM']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'V' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['V']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'XOM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['XOM']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'WMT' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['WMT']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PG' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PG']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'HD' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['HD']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'CVX' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['CVX']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'ABBV' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['ABBV']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'KO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['KO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PEP' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PEP']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MRK' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MRK']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'BAC' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['BAC']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PFE' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PFE']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'AVGO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AVGO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'COST' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['COST']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'TMO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['TMO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'DIS' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['DIS']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'ADBE' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['ADBE']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'CRM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['CRM']: YFTzMissingError('possibly delisted; no timezone found')
+Downloading data for ['AAPL', 'MSFT', 'GOOG', 'AMZN', 'META', 'NVDA', 'TSLA', 'BRK-B', 'UNH', 'JNJ', 'JPM', 'V', 'XOM', 'WMT', 'PG', 'MA', 'HD', 'CVX', 'ABBV', 'KO', 'PEP', 'MRK', 'BAC', 'PFE', 'AVGO', 'COST', 'TMO', 'DIS', 'ADBE', 'CRM'] from 2010-01-01 to 2024-12-31...
+Running feature engineering (FinRL-compatible subset)...
+Converting to gymfolio format...
+Saved:
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/full/finrl_raw.csv
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/full/df_ohlc.pkl (shape=(3773, 80))
+- /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded/full/df_observations.pkl (shape=(3773, 160))
+Done. Data saved under /Users/jungwoo.hong/Documents/BIAI/DPMORL/DPMORL/data/portfolio_expanded
+Failed to get ticker 'AAPL' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AAPL']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MSFT' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MSFT']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'GOOG' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['GOOG']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'AMZN' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AMZN']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'META' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['META']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'NVDA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['NVDA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'TSLA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['TSLA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'BRK-B' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['BRK-B']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'UNH' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['UNH']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'JNJ' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['JNJ']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'JPM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['JPM']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'V' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['V']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'XOM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['XOM']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'WMT' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['WMT']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PG' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PG']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MA' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MA']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'HD' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['HD']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'CVX' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['CVX']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'ABBV' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['ABBV']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'KO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['KO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PEP' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PEP']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'MRK' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['MRK']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'BAC' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['BAC']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'PFE' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['PFE']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'AVGO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['AVGO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'COST' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['COST']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'TMO' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['TMO']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'DIS' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['DIS']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'ADBE' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['ADBE']: YFTzMissingError('possibly delisted; no timezone found')
+Failed to get ticker 'CRM' reason: 'str' object has no attribute 'name'
+
+1 Failed download:
+['CRM']: YFTzMissingError('possibly delisted; no timezone found')
+Downloading data for ['AAPL', 'MSFT', 'GOOG', 'AMZN', 'META', 'NVDA', 'TSLA', 'BRK-B', 'UNH', 'JNJ', 'JPM', 'V', 'XOM', 'WMT', 'PG', 'MA', 'HD', 'CVX', 'ABBV', 'KO', 'PEP', 'MRK', 'BAC', 'PFE', 'AVGO', 'COST', 'TMO', 'DIS', 'ADBE', 'CRM'] from 2015-01-01 to 2019-12-31...
+Running feature engineering (FinRL-compatible subset)...
+Converting to gymfolio format...
+Saved:
+- data/portfolio_expanded/train/finrl_raw.csv
+- data/portfolio_expanded/train/df_ohlc.pkl (shape=(1257, 120))
+- data/portfolio_expanded/train/df_observations.pkl (shape=(1257, 240))
